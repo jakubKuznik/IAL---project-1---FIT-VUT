@@ -79,6 +79,7 @@ void DLL_Error() {
  * @param list Ukazatel na strukturu dvousměrně vázaného seznamu
  */
 void DLL_Init( DLList *list ) {
+    // Initialize every pointer to NULL
     list->firstElement = NULL;
     list->activeElement = NULL;
     list->lastElement = NULL;
@@ -92,14 +93,18 @@ void DLL_Init( DLList *list ) {
  * @param list Ukazatel na inicializovanou strukturu dvousměrně vázaného seznamu
  */
 void DLL_Dispose( DLList *list ) {
-
+    //Freeing space from first list to last 
     list->activeElement = list->firstElement;
+    
+    // If last element is reached break 
     while (list->activeElement != list->lastElement){
         list->activeElement = list->activeElement->nextElement;
         free(list->activeElement->previousElement);
     }
+    // freeing last element simountaniously 
     free(list->activeElement);
 
+    // Init same ass DLL_Init
     list->activeElement = NULL;
     list->firstElement = NULL;
     list->lastElement = NULL;
@@ -114,32 +119,36 @@ void DLL_Dispose( DLList *list ) {
  * @param data Hodnota k vložení na začátek seznamu
  */
 void DLL_InsertFirst( DLList *list, int data ) {
-    
-    DLLElementPtr help_var;
+
+    //temporarily variables
+    DLLElementPtr inserting_node;
     DLLElementPtr help_var2;
-    help_var = malloc(sizeof(struct DLLElement));
-    if(help_var == NULL){
+   
+    // Allocation space for new node
+    inserting_node = malloc(sizeof(struct DLLElement));
+    // If allocation failed
+    if(inserting_node == NULL){
         DLL_Error();
         return;
     }
 
-    help_var->data = data;
-    help_var->nextElement = NULL;
-    help_var->previousElement = NULL;
+    //Init new node 
+    inserting_node->data = data;
+    inserting_node->nextElement = NULL;
+    inserting_node->previousElement = NULL;
 
 
     // If list is not empty
     if(list->firstElement != NULL){
         help_var2 = list->firstElement;
         
-        list->firstElement = help_var;
+        list->firstElement = inserting_node;
         list->firstElement->nextElement = help_var2;
         help_var2->previousElement = list->firstElement;
-
+    //empty list
     }else{
-        list->firstElement = help_var;
-        list->lastElement = help_var;
-        //list->activeElement = help_var;
+        list->firstElement = inserting_node;
+        list->lastElement = inserting_node;
         list->firstElement->nextElement = list->lastElement->nextElement = NULL;
         list->firstElement->previousElement = list->lastElement->previousElement = NULL;
     }
@@ -155,29 +164,31 @@ void DLL_InsertFirst( DLList *list, int data ) {
  */
 void DLL_InsertLast( DLList *list, int data ) {
 
-
-    DLLElementPtr help_var;
-    help_var = malloc(sizeof(struct DLLElement));
-    if(help_var == NULL){
+    DLLElementPtr inserting_node;
+    
+    // Allocation space for new node
+    inserting_node = malloc(sizeof(struct DLLElement));
+    // If allocation failed
+    if(inserting_node == NULL){
         DLL_Error();
         return;
     }
 
-    help_var->data = data;
-    help_var->nextElement = NULL;
+    //Init new node 
+    inserting_node->data = data;
+    inserting_node->nextElement = NULL;
 
 
     // If list is not empty
     if(list->lastElement != NULL){
-       list->lastElement->nextElement = help_var;
-       help_var->previousElement = list->lastElement;
-       help_var->nextElement = NULL;
-       list->lastElement = help_var;
+       list->lastElement->nextElement = inserting_node;
+       inserting_node->previousElement = list->lastElement;
+       inserting_node->nextElement = NULL;
+       list->lastElement = inserting_node;
 
     }else{ //Empty list
-        list->firstElement = help_var;
-        list->lastElement = help_var;
-        //list->activeElement = help_var;
+        list->firstElement = inserting_node;
+        list->lastElement = inserting_node;
         list->firstElement->nextElement = list->lastElement->nextElement = NULL;
         list->firstElement->previousElement = list->lastElement->previousElement = NULL;
     }
@@ -192,6 +203,7 @@ void DLL_InsertLast( DLList *list, int data ) {
  * @param list Ukazatel na inicializovanou strukturu dvousměrně vázaného seznamu
  */
 void DLL_First( DLList *list ) {
+    // Return pointer to first element
     list->activeElement = list->firstElement;
 }
 
@@ -203,6 +215,7 @@ void DLL_First( DLList *list ) {
  * @param list Ukazatel na inicializovanou strukturu dvousměrně vázaného seznamu
  */
 void DLL_Last( DLList *list ) {
+    // Return pointer to last element
     list->activeElement = list->lastElement;
 }
 
@@ -214,13 +227,13 @@ void DLL_Last( DLList *list ) {
  * @param dataPtr Ukazatel na cílovou proměnnou
  */
 void DLL_GetFirst( DLList *list, int *dataPtr ) {
+    //Error if want first node of empty list
     if (list->firstElement == NULL){
         DLL_Error();
         return;
     }
-
+    //Returns first node data     
     *dataPtr = list->firstElement->data;
-
 }
 
 /**
@@ -231,10 +244,12 @@ void DLL_GetFirst( DLList *list, int *dataPtr ) {
  * @param dataPtr Ukazatel na cílovou proměnnou
  */
 void DLL_GetLast( DLList *list, int *dataPtr ) {
+    //Error if want first node of empty list
     if (list->firstElement == NULL){
         DLL_Error();
         return;
     }
+    //Returns last node data     
     *dataPtr = list->lastElement->data;
 }
 
@@ -246,10 +261,11 @@ void DLL_GetLast( DLList *list, int *dataPtr ) {
  * @param list Ukazatel na inicializovanou strukturu dvousměrně vázaného seznamu
  */
 void DLL_DeleteFirst( DLList *list ) {
+    //If list is empty 
     if(list->firstElement == NULL)
         return;
 
-    
+    // If list has only one element
     if((list->firstElement) == (list->activeElement)){
         list->activeElement = NULL;
     }
@@ -281,10 +297,11 @@ void DLL_DeleteFirst( DLList *list ) {
  */
 void DLL_DeleteLast( DLList *list ) {
     
+    // Doesnt do anything with empty list 
     if(list->lastElement == NULL)
         return;
 
-    
+    // If list has only one element 
     if(list->lastElement == list->activeElement){
         list->activeElement = NULL;
     }
@@ -316,9 +333,11 @@ void DLL_DeleteLast( DLList *list ) {
  * @param list Ukazatel na inicializovanou strukturu dvousměrně vázaného seznamu
  */
 void DLL_DeleteAfter( DLList *list ) {
+    // If there is no active element 
     if(list->activeElement == NULL)
         return;
     
+    // If active element is last cant delete after it  
     if (list->activeElement == list->lastElement)
         return;
 
@@ -348,24 +367,25 @@ void DLL_DeleteAfter( DLList *list ) {
  */
 void DLL_DeleteBefore( DLList *list ) {
    
+    //If there is no active element
     if(list->activeElement == NULL)
         return;
+    //Can delete before first element
     if(list->activeElement == list->firstElement)
         return;
-    
+
+    //Variable initialization  
     DLLElementPtr help_var;
     help_var = list->activeElement->previousElement;
     list->activeElement->previousElement = help_var->previousElement;
     
-   
+    //
     if (help_var != list->firstElement) {
         help_var->previousElement->nextElement = list->activeElement;
-    }
+    } // If deleting first element
     else {
         list->firstElement = list->activeElement;
     }
-
-
     free(help_var);
 }
 
@@ -380,26 +400,28 @@ void DLL_DeleteBefore( DLList *list ) {
  */
 void DLL_InsertAfter( DLList *list, int data ) {
 
+    // If there is no active element 
     if (list->activeElement == NULL)
         return;
-
-         
+    //var init      
     DLLElementPtr help_var = list->activeElement->nextElement;
 
+    //alocate space
     help_var = malloc(sizeof(struct DLLElement));
+    //Not successfull alocation 
     if(help_var == NULL){
         DLL_Error();
         return;
     }
-
+    //variable init 
     help_var->data = data;
     help_var->nextElement = list->activeElement->nextElement;
     help_var->previousElement = list->activeElement;
-
-    
+ 
+    //If insert to last element 
     if(list->activeElement == list->lastElement){
         list->lastElement = help_var;    
-    }
+    } 
     else{
         list->activeElement->nextElement->previousElement = help_var;
     }
@@ -417,23 +439,26 @@ void DLL_InsertAfter( DLList *list, int data ) {
  * @param data Hodnota k vložení do seznamu před právě aktivní prvek
  */
 void DLL_InsertBefore( DLList *list, int data ) {
+    // There is no active elem.
     if(list->activeElement == NULL)
         return;
     
+    //alocation
     DLLElementPtr help = malloc(sizeof(struct DLLElement));
+    //Not succes alocation 
     if (help == NULL){
         DLL_Error();
         return;
     }
-    
-    
+    // Var init 
     help->data = data;
     help->previousElement = list->activeElement->previousElement;
     help->nextElement = list->activeElement;
     
+
     if (list->activeElement != list->firstElement) {
         list->activeElement->previousElement->nextElement = help;
-    }
+    } // If list is first elem
     else {
         list->firstElement = help;
     }
@@ -449,14 +474,13 @@ void DLL_InsertBefore( DLList *list, int data ) {
  * @param dataPtr Ukazatel na cílovou proměnnou
  */
 void DLL_GetValue( DLList *list, int *dataPtr ) {
-    
+
+    // If no active error 
     if(list->activeElement == NULL){
         DLL_Error();
         return;
     }
-    
     *dataPtr = list->activeElement->data;
-
 }
 
 /**
@@ -468,6 +492,8 @@ void DLL_GetValue( DLList *list, int *dataPtr ) {
  */
 void DLL_SetValue( DLList *list, int data ) {
 
+
+    // If no active dont do anything 
     if(list->activeElement == NULL){
         return;
     }
@@ -482,6 +508,7 @@ void DLL_SetValue( DLList *list, int data ) {
  * @param list Ukazatel na inicializovanou strukturu dvousměrně vázaného seznamu
  */
 void DLL_Next( DLList *list ) {
+    // If no active dont do anything 
     if(list->activeElement == NULL)
         return;
 
@@ -497,6 +524,7 @@ void DLL_Next( DLList *list ) {
  * @param list Ukazatel na inicializovanou strukturu dvousměrně vázaného seznamu
  */
 void DLL_Previous( DLList *list ) {
+    //If no active dont do anything 
     if(list->activeElement == NULL)
         return;
 

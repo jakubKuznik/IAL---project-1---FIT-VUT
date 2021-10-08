@@ -58,14 +58,16 @@ void untilLeftPar( Stack *stack, char *postfixExpression, unsigned *postfixExpre
     // Variable so i dont have to enter stack multiple time 
     char c;
 
+    // While stack dont reach '(' delete everything
     while (Stack_IsEmpty(stack) == 0){
         Stack_Top(stack, &c);
         Stack_Pop(stack);
+
+
         if(c == '(')
             break;
-        postfixExpression[*postfixExpressionLength] = c;
-        *postfixExpressionLength = *postfixExpressionLength + 1;
 
+        postfixExpression[(*postfixExpressionLength)++] = c;
     }
 }
 
@@ -97,16 +99,18 @@ void doOperation( Stack *stack, char c, char *postfixExpression, unsigned *postf
     else if(c == '('){
         Stack_Push(stack, c);
     }
+    // Character is operator
     else{
-        char t; // symbol from stack top
+        char t; 
 
+        // while there is something in stack
         while (Stack_IsEmpty(stack) == 0){
             Stack_Top(stack, &t);
-
+            // if top is ( break
             if(t == '('){
                 break;
             }
-
+            // If top is operator + - and actual is not break
             else if(t == '+' || t == '-'){
                 if(c == '+' || c == '-'){
                     Stack_Pop(stack);
@@ -173,27 +177,32 @@ void doOperation( Stack *stack, char c, char *postfixExpression, unsigned *postf
  * @returns Znakový řetězec obsahující výsledný postfixový výraz
  */
 char *infix2postfix( const char *infixExpression ) {
-    
-    char *help = calloc(MAX_LEN, sizeof(char));
-    if(help == NULL)
+
+    // Alocate space   
+    char *node = calloc(MAX_LEN, sizeof(char));
+
+    // Alocation failed 
+    if(node == NULL)
         return NULL;
 
-    unsigned postfix_len = 0;
 
+    // Create init variables
+    unsigned postfix_len = 0;
     Stack stack;
     Stack_Init(&stack);
 
+    // Do operation until u reach =
     for(int i = 0; infixExpression[i] != '=';i++){
-        doOperation(&stack, infixExpression[i], help, &postfix_len);
+        doOperation(&stack, infixExpression[i], node, &postfix_len);
     }
-    
     
     while (Stack_IsEmpty(&stack) == 0){
-        untilLeftPar(&stack, help, &postfix_len);
+        untilLeftPar(&stack, node, &postfix_len);
     }
 
-    help[postfix_len++] = '=';
-    return help;
+    // set end of expresion to =
+    node[postfix_len++] = '=';
+    return node;
 }
 
 

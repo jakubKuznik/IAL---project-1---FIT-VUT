@@ -109,6 +109,7 @@ int Stack_IsEmpty( const Stack *stack ) {
  * @returns Nenulovou hodnotu v případě, že je zásobník plný, jinak nulu
  */
 int Stack_IsFull( const Stack *stack ) {
+	// We are indenxing from 0 so max size is STACK_SIZE - 1
 	if (stack->topIndex >= STACK_SIZE-1)
 		return 1;
 	return 0;
@@ -131,6 +132,7 @@ void Stack_Top( const Stack *stack, char *dataPtr ) {
 		Stack_Error(SERR_TOP);
 		return;
 	}
+	//set top to dataptr
 	*dataPtr = stack->array[stack->topIndex];
 }
 
@@ -148,6 +150,7 @@ void Stack_Top( const Stack *stack, char *dataPtr ) {
  * @param stack Ukazatel na inicializovanou strukturu zásobníku
  */
 void Stack_Pop( Stack *stack ) {
+
 	if (Stack_IsEmpty(stack) != 0)
  		return; 	   // If stack is empty dont do anything.
 
@@ -167,10 +170,12 @@ void Stack_Pop( Stack *stack ) {
  */
 void Stack_Push( Stack *stack, char data ) {
 
+	// If full error
 	if (Stack_IsFull(stack) == 1){
 		Stack_Error(SERR_PUSH);
 		return;
 	}
+	//increment nodes_sum and store one node to top
 	stack->topIndex++;
 	stack->array[stack->topIndex] = data;
 }
