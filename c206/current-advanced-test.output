@@ -1,0 +1,173 @@
+Double Linked List - Advanced Tests
+===================================
+
+[TEST01]
+List initialization
+~~~~~~~~~~~~~~~~~~~
+-----------------
+-----------------
+
+[TEST02]
+Calling DLL_GetFirst for empty list should cause en error.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+*ERROR* The program has performed an illegal operation.
+Function DLL_GetFirst has called function DLL_Error.
+
+[TEST03]
+Calling DLL_GetLast for empty list should cause en error.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+*ERROR* The program has performed an illegal operation.
+Function DLL_GetLast has called function DLL_Error.
+
+[TEST04]
+Calling DLL_GetValue for empty list should cause en error.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+*ERROR* The program has performed an illegal operation.
+Function DLL_GetValue has called function DLL_Error.
+
+[TEST05]
+Calling DLL_First for empty list should do nothing.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-----------------
+-----------------
+
+[TEST06]
+Calling DLL_Last for empty list should do nothing.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-----------------
+-----------------
+
+[TEST07]
+Calling DLL_DeleteFirst for empty list should do nothing.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-----------------
+-----------------
+
+[TEST08]
+Calling DLL_DeleteLast for empty list should do nothing.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-----------------
+-----------------
+
+[TEST09]
+Calling DLL_DeleteAfter for empty list should do nothing.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-----------------
+-----------------
+
+[TEST10]
+Calling DLL_DeleteBefore for empty list should do nothing.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-----------------
+-----------------
+
+[TEST11]
+Calling DLL_InsertAfter for empty list should do nothing.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-----------------
+-----------------
+
+[TEST12]
+Calling DLL_InsertBefore for empty list should do nothing.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-----------------
+-----------------
+
+[TEST13]
+Calling DLL_SetValue for empty list should do nothing.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-----------------
+-----------------
+
+[TEST14]
+Calling DLL_Next for empty list should do nothing.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-----------------
+-----------------
+
+[TEST15]
+Calling DLL_Previous for empty list should do nothing.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-----------------
+-----------------
+
+[TEST16]
+Function DLL_IsActive for empty list should return FALSE.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Return value of function DLL_IsActive is FALSE.
+
+[TEST17]
+Calling DLL_Dispose for empty list should do nothing.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-----------------
+-----------------
+
+[TEST18]
+3x DLL_InsertFirst
+~~~~~~~~~~~~~~~~
+-----------------
+ 	4
+-----------------
+-----------------
+ 	5
+ 	4
+-----------------
+-----------------
+ 	6
+ 	5
+ 	4
+-----------------
+
+[TEST19]
+The list should not be active now.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Return value of function DLL_IsActive is FALSE.
+
+[TEST20]
+We start at the begin of the list and go to the end.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-----------------
+ 	6	 <= activity 
+ 	5
+ 	4
+-----------------
+Return value of function DLL_IsActive is TRUE.
+-----------------
+ 	6
+ 	5	 <= activity 
+ 	4
+-----------------
+Return value of function DLL_IsActive is TRUE.
+-----------------
+ 	6
+ 	5
+ 	4	 <= activity 
+-----------------
+Return value of function DLL_IsActive is TRUE.
+-----------------
+ 	6
+ 	5
+ 	4
+-----------------
+Return value of function DLL_IsActive is FALSE.
+
+[TEST21]
+We start at the end of the list and go to its begin.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-----------------
+ 	6
+ 	5
+ 	4	 <= activity 
+-----------------
+Return value of function DLL_IsActive is TRUE.
+-----------------
+ 	6
+ 	5
+ 	4
+-----------------
+Return value of function DLL_IsActive is FALSE.
+-----------------
+ 	6
+ 	5
+ 	4
+-----------------
