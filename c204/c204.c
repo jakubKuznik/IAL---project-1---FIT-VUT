@@ -55,22 +55,18 @@ int solved;
  * @param postfixExpressionLength Ukazatel na aktuální délku výsledného postfixového výrazu
  */
 void untilLeftPar( Stack *stack, char *postfixExpression, unsigned *postfixExpressionLength ) {
-    
     // Variable so i dont have to enter stack multiple time 
     char c;
 
-    do
-    {
+    while (Stack_IsEmpty(stack) == 0){
         Stack_Top(stack, &c);
         Stack_Pop(stack);
-        if(c == "(")
+        if(c == '(')
             break;
-        postfixExpression[*postfixExpressionLength++] = c;
-    } while (Stack_IsEmpty(stack) != 0);
-    
+        postfixExpression[*postfixExpressionLength] = c;
+        *postfixExpressionLength = *postfixExpressionLength + 1;
 
-
-    return; 
+    }
 }
 
 /**
@@ -90,7 +86,42 @@ void untilLeftPar( Stack *stack, char *postfixExpression, unsigned *postfixExpre
  * @param postfixExpressionLength Ukazatel na aktuální délku výsledného postfixového výrazu
  */
 void doOperation( Stack *stack, char c, char *postfixExpression, unsigned *postfixExpressionLength ) {
+    
+    // If charater is operand
+    if((c >= 'a' && c <= 'z') || (c >= '0' && c <= '9') || (c >= 'A' && c <= 'Z')){
+        postfixExpression[(*postfixExpressionLength)++] = c;
+    }
+    else if(c == ')'){
+        untilLeftPar(stack, postfixExpression, postfixExpressionLength);
+    }
+    else if(c == '('){
+        Stack_Push(stack, c);
+    }
+    else{
+        char t; // symbol from stack top
 
+        while (Stack_IsEmpty(stack) == 0){
+            Stack_Top(stack, &t);
+
+            if(t == '('){
+                break;
+            }
+
+            else if(t == '+' || t == '-'){
+                if(c == '+' || c == '-'){
+                    Stack_Pop(stack);
+                    postfixExpression[(*postfixExpressionLength)++] = t;
+                    continue;
+                }
+                else{
+                    break;
+                }
+            }
+            Stack_Pop(stack);
+            postfixExpression[(*postfixExpressionLength)++] = t;
+        } 
+        Stack_Push(stack, c);
+     } 
 }
 
 /**
@@ -142,9 +173,28 @@ void doOperation( Stack *stack, char c, char *postfixExpression, unsigned *postf
  * @returns Znakový řetězec obsahující výsledný postfixový výraz
  */
 char *infix2postfix( const char *infixExpression ) {
+    
+    char *help = calloc(MAX_LEN, sizeof(char));
+    if(help == NULL)
+        return NULL;
 
-    solved = FALSE; /* V případě řešení smažte tento řádek! */
-    return NULL; /* V případě řešení můžete smazat tento řádek. */
+    unsigned postfix_len = 0;
+
+    Stack stack;
+    Stack_Init(&stack);
+
+    for(int i = 0; infixExpression[i] != '=';i++){
+        doOperation(&stack, infixExpression[i], help, &postfix_len);
+    }
+    
+    
+    while (Stack_IsEmpty(&stack) == 0){
+        untilLeftPar(&stack, help, &postfix_len);
+    }
+
+    help[postfix_len++] = '=';
+    return help;
 }
+
 
 /* Konec c204.c */
